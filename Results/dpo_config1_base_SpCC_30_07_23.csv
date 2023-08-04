@@ -1,0 +1,2 @@
+W_net,Q_net,Total_power,SpCC_W_Br,SpCC_Q_Br,SpCC_dH_Br,SpCC_W_Gr,SpCC_Q_Gr,SpCC_dH_Gr,depth,res_length,n_streams,m_dot,max_speed,C_Br,C_Gr,con satisfied
+1200,0,1200,203.7320574,,203.7320574,212.9,,212.9,6000,7000,7,41.96161549,2.724309486,307513085.2,321391832.5,1

@@ -219,7 +219,7 @@ function result = total_analytic_system_co2(params)
     result.P_prod_surface = P_prod_surface;
     result.delta_H = delta_H;
     result.delta_h = delta_h;
-    result.max_speed = params.m_dot/(pi*(params.side_stream_radius)^2)/result_prodWell.EndDensity(1);
+    result.max_speed = params.m_dot/(pi*(params.well_radius)^2)/result_prodWell.EndDensity(1);
     
     % costs
     result.CapitalCost = result_capitalCost;

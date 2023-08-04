@@ -331,7 +331,7 @@ classdef Surface_plant
                 elseif cooling_required == 1
 
                     %m_dot_water is water being sold for waste heat                        
-                    m_dot_water = (m_dot_sco2_1 * (h_hex1_hot_in-h_hex1_hot_out) + m_dot_sco2_2 * (h_hex2_hot_in-h_hex2_hot_out))/(h_hex2_cold_out-h_hex1_cold_in);
+                    m_dot_water = (m_dot_sco2_2 * (h_hex2_hot_in-h_hex2_hot_out))/(h_hex2_cold_out-h_hex1_cold_in);
                     m_dot_water_CoolLoop = m_dot_sco2_1 * (h_hex1_hot_in-h_hex1_hot_out)/(h_hex1_cold_out-h_hex1_cold_in);
                     h_hex2_cold_in = h_hex1_cold_out;
                     T_hex2_cold_in = CoolProp.PropsSI('T', 'P', params.P_cooling_water - params.dP_hex, 'HMASS', h_hex2_cold_in, 'water') - 273.15; %C

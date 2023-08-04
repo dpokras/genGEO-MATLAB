@@ -38,7 +38,9 @@ function result = CapitalCost_CPG(result_turbine, result_HEX, result_pumps, resu
     
     C_well_brownfield = C_well_vertical + C_well_vertical_grean_extended + C_wells_horizontal;
     C_well_greenfield = 2*C_well_vertical + C_wells_horizontal;
-
+        
+    C_wells_vertical_Br = C_well_vertical + C_well_vertical_grean_extended;
+    C_wells_vertical_Gr = 2*C_well_vertical;
     % 4. Wellfield Development 
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     C_wellfield = CapitalCost_Wellfield(params);
@@ -68,18 +70,22 @@ function result = CapitalCost_CPG(result_turbine, result_HEX, result_pumps, resu
     C_TCI = CapitalCost_SurfacePlantfunc.TCI([C_TBM_brownfield, C_TBM_greenfield]);
     C_TCI_SurfacePlant = CapitalCost_SurfacePlantfunc.TCI(C_TBM_plant+C_tCO2);
     C_TCI_Subsurface = CapitalCost_SurfacePlantfunc.TCI([C_TBM_subsurface_brownfield, C_TBM_subsurface_greenfield]);
-
+    
+    result.C_TBM_plant = C_TBM_plant;
     result.CostSurfacePlant = C_TCI_SurfacePlant;
     result.CostSubsurface_brownfield = C_TCI_Subsurface(1);
     result.CostSubsurface_greenfield = C_TCI_Subsurface(2);
     result.C_gatheringSystem = C_gatheringSystem;
-    result.C_wells_production = C_well_vertical;
+    result.C_wells_vertical = C_well_vertical;
+    result.C_wells_vertical_Br = C_wells_vertical_Br;
+    result.C_wells_vertical_Gr = C_wells_vertical_Gr;
     result.C_wells_horizontal = C_wells_horizontal;
     result.C_wellfield = C_wellfield;
     result.C_exploration = C_exploration;
     result.C_stimulation = C_stimulation;
     result.C_brownfield = C_TCI(1);
     result.C_greenfield = C_TCI(2);
+    result.C_tCO2 = C_tCO2;
 
 end
 

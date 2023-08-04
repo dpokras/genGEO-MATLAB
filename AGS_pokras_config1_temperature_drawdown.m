@@ -2,7 +2,7 @@ clear;
 close all;
 clc;
 
-date = '_26_06_23';
+date = '_31_07_23';
 %% Define System Parameters
 params                  = SimulationParameters; %radius, surface temp, dT/dz, etc.
 
@@ -43,7 +43,6 @@ results = struct;
 
     toc;                
     A = [result.Power/1e3,...
-        time,...
         ones(1,30)*result.Power_total_sold_avg/1e3,...
         ones(1,30)*result.CapitalCost.C_brownfield/result.Power_total_sold_avg,...
         ones(1,30)*result.CapitalCost.C_greenfield/result.Power_total_sold_avg,...
