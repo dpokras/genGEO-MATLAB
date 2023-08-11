@@ -1,6 +1,6 @@
 function [result,x_opt] = AGS_solver(useMySolver, x0, params)
     
-    time = [1,2,3,4,5,15,30];
+    time = [0.1,0.5,1:1:30];
     time_total = 3600 * 24 * 365 * time(end); %s
     Energy_net = [];
     Thermal_Energy_net = [];
@@ -8,7 +8,7 @@ function [result,x_opt] = AGS_solver(useMySolver, x0, params)
     Energy_sold = [];
     Power = [];
     
-    params.time_years = time(1); % set to first time value or any other suitable value
+    params.time_years = time(end); % set to first time value or any other suitable value
     
     if useMySolver % compute x_opt once outside of the loop
         if params.config == 1 || params.config == 2
@@ -53,9 +53,10 @@ function [result,x_opt] = AGS_solver(useMySolver, x0, params)
         Energy_sold(end + 1) = (result.W_net + result.Q_net) .* time_seconds;  %J
         Power(end + 1) = (result.W_net + result.Q_net);  %W
     end
-    
+
+    result.opt_m_dot = x_opt(1);
     result.S_ratio = result.S_ratio;
-    result.Power = Power(end);  %W
+    result.Power = Power;  %W
     result.Power_electric_sold_avg = sum(Energy_net)/time_total;
     result.Power_reservoir_avg = sum(Energy_reservoir)/time_total;
     result.Power_heat_sold_avg = sum(Thermal_Energy_net)/time_total;

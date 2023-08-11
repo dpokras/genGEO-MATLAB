@@ -7,7 +7,7 @@ date = '_04_08_23';
 %% Define System Parameters
 params                  = SimulationParameters; %radius, surface temp, dT/dz, etc.
 
-params.config = 1
+params.config = 4
 params.S_ratio = 0; %S_ratio = m_S1/m_total
 params.find_opt_S_ratio_toggle = 0;
 if params.config == 1 || params.config == 2
@@ -23,7 +23,7 @@ useMySolver = 1;
 %% Collection
 j = 5;
 k = 10;
-length = 11000;
+length = 12000;
 A = zeros(size(j:k,2),21);
 
 for l = 1:size(length,2)
@@ -33,7 +33,7 @@ for l = 1:size(length,2)
 
     params.res_length = length(l);
     
-    filename = strcat('Results/dpo_opt_config1_res',num2str(length(l)),date,'.csv');
+    filename = strcat('Results/dpo_opt_config4_res',num2str(length(l)),date,'.csv');
     %% Calculate
     
     for i = j:k

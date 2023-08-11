@@ -1,45 +1,55 @@
 clc;
-clear;
+% clear;
 close;
-% %% res_ength vs n_streams 
-% length = 5000:1000:12000;
-% S = struct;
-% j = 5;
-% k = 10;
-% 
-% SpCC = zeros(size(j:k,2),size(length,2));
-% M = zeros(size(j:k,2),size(length,2));
-% C_Gr = zeros(size(j:k,2),size(length,2));
-% C_Surf = zeros(size(j:k,2),size(length,2));
-% C_Sub = zeros(size(j:k,2),size(length,2));
-% W_net = zeros(size(j:k,2),size(length,2));
-% 
-% for l = 1:size(length,2)
-%     filename = strcat('dpo_opt_config1_res',num2str(length(l)),'_22_06_23.csv');
-% 
-%     T = readtable(filename);
-%     S(l).T = T;
-%     SpCC(:,l) = T.SpCC_W_Gr(1:size(j:k,2),:);
-%     M(:,l) = T.m_dot(1:size(j:k,2),:);
-%     C_Gr(:,l) = T.C_Subsurface_greenfield(1:size(j:k,2),:);
-%     C_Surf(:,l) = T.C_SurfacePlant(1:size(j:k,2),:);
-%     C_Sub(:,l) = T.C_Subsurface_greenfield(1:size(j:k,2),:);
-%     W_net(:,l) = T.W_net(1:size(j:k,2),:);
-% 
-% end
-% 
-% figure(1);
-% y = j:k;
-% x = length/1e3;
-% [X,Y] = meshgrid(x,y);
-% surf(X,Y,SpCC);
-% yticks(y);
-% xticks(x);
-% ylabel('Number of Subsurface Streams');
-% xlabel('Reservoir Length per Stream [km]');
-% cb = colorbar;
-% cb.Label.String = 'SpCC Greenfield ($/W)';
-% 
+%% res_ength vs n_streams 
+length = 5000:1000:10000;
+S = struct;
+j = 5;
+k = 10;
+
+SpCC = zeros(size(j:k,2),size(length,2));
+M = zeros(size(j:k,2),size(length,2));
+C_Gr = zeros(size(j:k,2),size(length,2));
+W_net = zeros(size(j:k,2),size(length,2));
+
+for l = 1:size(length,2)
+    filename = strcat('Results/dpo_opt_config1_res',num2str(length(l)),'_04_08_23.csv');
+
+    T = readtable(filename);
+    S(l).T = T;
+    SpCC(:,l) = T.SpCC_dH_Gr(1:size(j:k,2),:);
+    M(:,l) = T.m_dot(1:size(j:k,2),:);
+    C_Gr(:,l) = T.C_Gr(1:size(j:k,2),:);
+    W_net(:,l) = T.W_net_avg(1:size(j:k,2),:);
+
+end
+
+figure(10);
+y = j:k;
+x = length/1e3;
+[X,Y] = meshgrid(x,y);
+surf(X,Y,SpCC);
+yticks(y);
+xticks(x);
+ylabel('Number of Subsurface Streams');
+xlabel('Reservoir Length per Stream (km)');
+zlabel('SpCC Greenfield ($/W)')
+cb = colorbar;
+cb.Label.String = 'SpCC Greenfield ($/W)';
+
+
+figure(20);
+y = j:k;
+x = length/1e3;
+[X,Y] = meshgrid(x,y);
+contourf(X,Y,SpCC,15);
+yticks(y);
+xticks(x);
+ylabel('Number of Subsurface Streams');
+xlabel('Reservoir Length per Stream [km]');
+cb = colorbar;
+cb.Label.String = 'SpCC Greenfield ($/W)';
+
 % figure(2);
 % y = j:k;
 % x = length/1e3;
@@ -51,7 +61,7 @@ close;
 % xlabel('Reservoir Length per Stream [km]');
 % legend show
 % hold off
-% 
+
 % figure(3);
 % y = j:k;
 % x = length/1e3;
@@ -63,7 +73,7 @@ close;
 % xlabel('Reservoir Length per Stream [km]');
 % legend show
 % hold off
-% 
+
 % figure(4);
 % y = j:k;
 % x = length/1e3;
@@ -74,70 +84,71 @@ close;
 % ylabel('Total Capital Investment (Sub-surface) (M$)');
 % xlabel('Reservoir Length per Stream [km]');
 % legend show
-% 
-% figure(5);
-% y = j:k;
-% x = length/1e3;
-% hold on
-% for i = flip(1:size(j:k,2))
-%     plot(x,W_net(i,:)/1e3, 'DisplayName',strcat('n = ', num2str(y(i))))
-% end
-% ylabel('Net Electric Power Generation (kW)');
-% xlabel('Reservoir Length per Stream [km]');
-% legend show
-% hold off
-% 
-% figure(6);
-% y = j:k;
-% x = length/1e3;
-% [X,Y] = meshgrid(x,y);
-% contourf(X,Y,W_net/1e3,15);
-% yticks(y);
-% xticks(x);
-% ylabel('Number of Subsurface Streams');
-% xlabel('Reservoir Length per Stream [km]');
-% colormap hot
-% cb = colorbar;
-% cb.Label.String = 'Net Electric Power Generation (MW)';
-% 
-% figure(7);
-% y = j:k;
-% x = length/1e3;
-% [X,Y] = meshgrid(x,y);
-% contourf(X,Y,C_Gr/1e6,15);
-% yticks(y);
-% xticks(x);
-% ylabel('Number of Subsurface Streams');
-% xlabel('Reservoir Length per Stream [km]');
-% colormap cool
-% cb = colorbar;
-% cb.Label.String = 'Total Capital Investment Greenfield (M$)';
-% 
-% figure(8);
-% y = j:k;
-% x = length/1e3;
-% [X,Y] = meshgrid(x,y);
-% contourf(X,Y,C_Sub/1e6,15);
-% yticks(y);
-% xticks(x);
-% ylabel('Number of Subsurface Streams');
-% xlabel('Reservoir Length per Stream [km]');
-% colormap cool
-% cb = colorbar;
-% cb.Label.String = 'Total Capital Investment Greenfield (Sub-surface) (M$)';
-% 
-% figure(9);
-% y = j:k;
-% x = length/1e3;
-% [X,Y] = meshgrid(x,y);
-% contourf(X,Y,C_Surf/1e6,15);
-% yticks(y);
-% xticks(x);
-% ylabel('Number of Subsurface Streams');
-% xlabel('Reservoir Length per Stream [km]');
-% colormap cool
-% cb = colorbar;
-% cb.Label.String = 'Total Capital Investment (Surface) (M$)';
+
+figure(5);
+y = j:k;
+x = length/1e3;
+hold on
+for i = flip(1:size(j:k,2))
+    plot(x,W_net(i,:)/1e3, 'DisplayName',strcat('n = ', num2str(y(i))))
+end
+ylabel('Net Electric Power Generation (kW)');
+xlabel('Reservoir Length per Stream [km]');
+legend show
+hold off
+
+figure(6);
+y = j:k;
+x = length/1e3;
+[X,Y] = meshgrid(x,y);
+contourf(X,Y,W_net/1e3,15);
+yticks(y);
+xticks(x);
+ylabel('Number of Subsurface Streams');
+xlabel('Reservoir Length per Stream [km]');
+colormap hot
+cb = colorbar;
+cb.Label.String = 'Net Electric Power Generation (MW)';
+
+figure(7);
+y = j:k;
+x = length/1e3;
+[X,Y] = meshgrid(x,y);
+contourf(X,Y,C_Gr/1e6,15);
+yticks(y);
+xticks(x);
+ylabel('Number of Subsurface Streams');
+xlabel('Reservoir Length per Stream [km]');
+colormap cool
+cb = colorbar;
+cb.Label.String = 'Total Capital Investment Greenfield (M$)';
+
+
+figure(8);
+y = j:k;
+x = length/1e3;
+[X,Y] = meshgrid(x,y);
+contourf(X,Y,C_Sub/1e6,15);
+yticks(y);
+xticks(x);
+ylabel('Number of Subsurface Streams');
+xlabel('Reservoir Length per Stream [km]');
+colormap cool
+cb = colorbar;
+cb.Label.String = 'Total Capital Investment Greenfield (Sub-surface) (M$)';
+
+figure(9);
+y = j:k;
+x = length/1e3;
+[X,Y] = meshgrid(x,y);
+contourf(X,Y,C_Surf/1e6,15);
+yticks(y);
+xticks(x);
+ylabel('Number of Subsurface Streams');
+xlabel('Reservoir Length per Stream [km]');
+colormap cool
+cb = colorbar;
+cb.Label.String = 'Total Capital Investment (Surface) (M$)';
 
 % % %% Well Radius vs Well Radius Ratio
 % % radii = linspace(0.2,1.0,5); %m
@@ -307,7 +318,7 @@ close;
 
 % %% Thermal Drawdown Power over time
 % 
-% filename = 'dpo_opt_config1_temperature_drawdown_26_06_23.csv';
+% filename = 'Results/dpo_opt_config1_temperature_drawdown_04_08_23.csv';
 % T = readtable(filename);
 %     
 % figure(1);
@@ -323,8 +334,9 @@ close;
 % plot(T.year, T.m_dot,'ko', 'LineWidth',1);
 % ylabel('Mass Flow Rate (kg/s)');
 % xlabel('time [yr]');
+
 % %% S_ratio vs res_length vs n_streams
-% ratios = linspace(0, 1, 6);
+% ratios = linspace(0.2, 1, 5);
 % streams = 5:10;
 % length = 5000:1000:10000;
 % S = struct;
@@ -393,19 +405,6 @@ close;
 % cb = colorbar;
 % cb.Label.String = 'SpCC Greenfield ($/W)';
 % 
-% figure(3);
-% y = streams;
-% x = length/1e3;
-% [X,Y] = meshgrid(x,y);
-% contourf(X,Y,SpCC(:,:,1),15);
-% yticks(y);
-% xticks(x);
-% ylabel('Number of Subsurface Streams');
-% xlabel('Reservoir Length per Stream [km]');
-% cb = colorbar;
-% cb.Label.String = 'SpCC Greenfield ($/W)';
-% 
-% 
 % figure(5);
 % x = ratios;
 % color_map = jet(size(length,2));
@@ -426,6 +425,41 @@ close;
 % xlabel('S Ratio (-)')
 % ylabel('SpCC Greenfield ($/W)')
 % legend('Location','northwest')
+
+% %% Config 4: res_length vs n_streams
+% length = 5000:1000:10000;
+% S = struct;
+% j = 5;
+% k = 10;
+% 
+% SpCC = zeros(size(j:k,2),size(length,2));
+% M = zeros(size(j:k,2),size(length,2));
+% C_Gr = zeros(size(j:k,2),size(length,2));
+% W_net = zeros(size(j:k,2),size(length,2));
+% 
+% for l = 1:size(length,2)
+%     filename = strcat('Results/dpo_opt_config4_res',num2str(length(l)),'_04_08_23.csv');
+% 
+%     T = readtable(filename);
+%     S(l).T = T;
+%     SpCC(:,l) = T.SpCC_dH_Gr(1:size(j:k,2),:);
+%     M(:,l) = T.m_dot(1:size(j:k,2),:);
+%     C_Gr(:,l) = T.C_Gr(1:size(j:k,2),:);
+%     W_net(:,l) = T.Total_power_avg(1:size(j:k,2),:);
+% 
+% end
+% 
+% figure(1);
+% y = j:k;
+% x = length/1e3;
+% [X,Y] = meshgrid(x,y);
+% contourf(X,Y,SpCC(:,:,1),15);
+% yticks(y);
+% xticks(x);
+% ylabel('Number of Subsurface Streams');
+% xlabel('Reservoir Length per Stream [km]');
+% cb = colorbar;
+% cb.Label.String = 'SpCC Greenfield ($/W)';
 
 % %% S on W_el and W_th and dH
 % % Assuming S_ratio, Total_power_avg, Q_net_avg, and W_net_avg are in T
@@ -576,42 +610,42 @@ close;
 % grid on;
 % 
 
-%% Cost Breakdown
-% Load the data
-T = readtable('Results/dpo_config3_S05_cost_breakdown_03_08_23.csv');
-
-% Variables specific to Greenfield (Gr)
-totalGreenField = [T.C_wells_horizontal, T.C_wells_vertical_Gr,T.C_TBM_plant +  T.C_tCO2, T.C_contingency_Gr, T.C_WC_Gr, T.C_wellfield];
-
-% Variables specific to Brownfield (Br)
-totalBrownField = [T.C_wells_horizontal, T.C_wells_vertical_Br,T.C_TBM_plant +  T.C_tCO2, T.C_contingency_Br, T.C_WC_Br, T.C_wellfield];
-
-% Labels for the costs
-labels = {'C_{wells, h}','C_{wells,v}','C_{plant}','C_{contingency}', 'C_{WC}', 'C_{wellfield}' };
-
-% Color map
-cmap = flipud(gray(7)); % 7 to match the number of categories
-
-value_gr = compose(['%.3f $M'], totalGreenField/1e6);
-percents_gr = compose([newline '%.3f%%'], totalGreenField/sum(totalGreenField)*100);
-
-value_br = compose(['%.3f $M'], totalBrownField/1e6);
-percents_br = compose([newline '%.3f%%'], totalBrownField/sum(totalBrownField)*100);
-
-% Pie chart for Greenfield scenario
-figure;
-pie(totalGreenField, strcat(value_gr, percents_gr));
-colormap(cmap);
-lgd = legend(labels, 'Location','northwest')
-lgd.Position = [0.05, 0.75, 0.2, 0.1];
-
-text(-1.8, -1.1, strcat('Total Cost of Capital:' ,{' '},num2str(sum(totalGreenField)/1e6), '$M'));
-% Pie chart for Brownfield scenario
-figure;
-pie(totalBrownField, strcat(value_br, percents_br));
-colormap(cmap);
-lgd = legend(labels, 'Location','northwest')
-lgd.Position = [0.05, 0.75, 0.2, 0.1];
-
-text(-1.8, -1.1, strcat('Total Cost of Capital:' ,{' '},num2str(sum(totalBrownField)/1e6), '$M'));
-
+% %% Cost Breakdown
+% % Load the data
+% T = readtable('Results/dpo_config3_S05_cost_breakdown_03_08_23.csv');
+% 
+% % Variables specific to Greenfield (Gr)
+% totalGreenField = [T.C_wells_horizontal, T.C_wells_vertical_Gr,T.C_TBM_plant +  T.C_tCO2, T.C_contingency_Gr, T.C_WC_Gr, T.C_wellfield];
+% 
+% % Variables specific to Brownfield (Br)
+% totalBrownField = [T.C_wells_horizontal, T.C_wells_vertical_Br,T.C_TBM_plant +  T.C_tCO2, T.C_contingency_Br, T.C_WC_Br, T.C_wellfield];
+% 
+% % Labels for the costs
+% labels = {'C_{wells, h}','C_{wells,v}','C_{plant}','C_{contingency}', 'C_{WC}', 'C_{wellfield}' };
+% 
+% % Color map
+% cmap = flipud(gray(7)); % 7 to match the number of categories
+% 
+% value_gr = compose(['%.3f $M'], totalGreenField/1e6);
+% percents_gr = compose([newline '%.3f%%'], totalGreenField/sum(totalGreenField)*100);
+% 
+% value_br = compose(['%.3f $M'], totalBrownField/1e6);
+% percents_br = compose([newline '%.3f%%'], totalBrownField/sum(totalBrownField)*100);
+% 
+% % Pie chart for Greenfield scenario
+% figure;
+% pie(totalGreenField, strcat(value_gr, percents_gr));
+% colormap(cmap);
+% lgd = legend(labels, 'Location','northwest')
+% lgd.Position = [0.05, 0.75, 0.2, 0.1];
+% 
+% text(-1.8, -1.1, strcat('Total Cost of Capital:' ,{' '},num2str(sum(totalGreenField)/1e6), '$M'));
+% % Pie chart for Brownfield scenario
+% figure;
+% pie(totalBrownField, strcat(value_br, percents_br));
+% colormap(cmap);
+% lgd = legend(labels, 'Location','northwest')
+% lgd.Position = [0.05, 0.75, 0.2, 0.1];
+% 
+% text(-1.8, -1.1, strcat('Total Cost of Capital:' ,{' '},num2str(sum(totalBrownField)/1e6), '$M'));
+% 

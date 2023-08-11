@@ -10,8 +10,8 @@ params                  = SimulationParameters; %radius, surface temp, dT/dz, et
 params.wellCostType     = 'Baseline';
 % params.wellCostType     = 'Ideal';
 params.find_opt_S_ratio_toggle = 0;
-params.S_ratio = 0.5; %S_ratio = m_S1/m_total
-params.config = 1;
+params.S_ratio = 0; %S_ratio = m_S1/m_total
+params.config = 4;
 if params.config == 1 || params.config == 2
     params.S_ratio = 1;
 end
@@ -22,8 +22,8 @@ params.n_streams = 7;
 params.res_length = 7000;
 
 %% Solver toggle    
-useMySolver = 1;
-x0 = 71;
+useMySolver = 0;
+x0 = 159.8;
 
 %% Calculate
 
@@ -51,7 +51,7 @@ A = [result.W_net/1e3,...
     params.depth,...
     params.res_length,...
     params.n_streams,...
-    x_opt(1),...
+    result.opt_m_dot,...
     result.max_speed,...
     result.CapitalCost.C_brownfield,...
     result.CapitalCost.C_greenfield,...
@@ -92,7 +92,7 @@ T = array2table(A,...
     'C_wells_vertical_Gr',...
     'C_wells_vertical_Br'});
 
-% writetable(T,strcat('Results/dpo_config3_S05_cost_breakdown',date,'.csv'));
+% writetable(T,strcat('Results/dpo_config1_m_dot_time_variance1',date,'.csv'));
 disp('hi');
 % figure(1)
 % hold on
